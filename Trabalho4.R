@@ -40,14 +40,6 @@ plotImage = function(imgArray){
 #Ex de uso pegando o primeiro sample
 plotImage(data[1,])
 
-
-########################################################################
-# Desenvolvimento dos Modelos                                          #
-########################################################################
-
-
-
-
 ##################################
 # Para gerar a fórmula concatenando os nomes
 #de cada uma das colunas
@@ -62,3 +54,27 @@ f <- paste('V1 ~',f)
 # Converte para fórmula
 f <- as.formula(f)
 f
+
+########################################################################
+# Desenvolvimento dos Modelos                                          #
+########################################################################
+
+empty <- TRUE
+# split the data from each class into train and val
+for (i in 0:9) {
+  numberData <- data[data[,1]==i, ]
+  
+  idx <- sample(1:nrow(numberData), 0.8*nrow(numberData))
+  print (length(idx))
+  trainNbrData <- numberData[idx,]
+  valNbrData <- numberData[-idx,]
+  if (empty) {
+    trainData <- trainNbrData
+    valData <- valNbrData
+    empty <- FALSE
+  } else {
+    trainData <- rbind(trainData, trainNbrData)
+    valData <- rbind(valData, valNbrData)
+  }
+}
+
