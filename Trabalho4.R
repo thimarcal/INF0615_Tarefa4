@@ -3,10 +3,51 @@
 # Alunos: Rafael Fernando Ribeiro                                      #
 #         Thiago Gomes Marcal Pereira                                  #
 ########################################################################
+library(e1071)
+library(neuralnet)
+
+# Predict data using model and evaluate
+predictAndEvaluateSVM <- function(model, data){
+  prediction = predict(model, data)
+  prediction = as.numeric(prediction >= 0.5)
+  prediction[prediction==0] = "0"
+  prediction[prediction==1] = "1"
+  
+  CM = as.matrix(table(Actual = data$V1, Predicted = prediction))
+  
+  if (dim(CM)[2] == 1) {
+    CM <- cbind(CM, c(0,0))
+  }
+  
+  TPR = CM[2,2] / (CM[2,2] + CM[2,1])
+  TNR = CM[1,1] / (CM[1,1] + CM[1,2])
+  ACCNorm = mean(c(TPR, TNR))
+  
+  return(list(CM=CM, ACCNorm=ACCNorm))
+}
+
+# Predict data using model and evaluate
+predictAndEvaluateNN <- function(model, data){
+  nnCompute = compute(model, data[,-1])
+  prediction = nnCompute$net.result
+  
+  prediction[prediction < 0.5] = -1
+  prediction[prediction >= 0.5] = 1
+  
+  CM = as.matrix(table(Actual = data$V1, Predicted = prediction))
+  if (dim(CM)[2] == 1) {
+    CM <- cbind(CM, c(0,0))
+  }
+  TPR = CM[2,2] / (CM[2,2] + CM[2,1])
+  TNR = CM[1,1] / (CM[1,1] + CM[1,2])
+  ACCNorm = mean(c(TPR, TNR))
+  
+  return(list(CM=CM, ACCNorm=ACCNorm))
+}
 
 set.seed(42)
-setwd("/Users/thiagom/Documents/Studies/Unicamp/MDC/INF-615/Tarefas/INF0615_Tarefa4/")
-#setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
+#setwd("/Users/thiagom/Documents/Studies/Unicamp/MDC/INF-615/Tarefas/INF0615_Tarefa4/")
+setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
 
 # Exemplo de leitura do dataset
 # A primeira feature/coluna (V1) é a classe 
@@ -78,3 +119,76 @@ for (i in 0:9) {
   }
 }
 
+# normalize data dividing by 255 as all images are from 0~255
+trainDataNorm <- trainData[,-1] / 255.0
+valDataNorm <- valData[,-1] / 255.0
+
+DIGITS <- 0:9
+digit <- 0
+
+#for (digit in DIGITS) {
+
+  # get train and val data for positive class data
+  trainDataNormDigit = trainDataNorm[trainData$V1 == digit,]
+  valDataNormDigit = valDataNorm[valData$V1 == digit,]
+  
+  empty <- TRUE
+  # get train and val data for negative class data
+  for (i in DIGITS[-(digit+1)]) {
+    trainDataNormNonDigitAux = trainDataNorm[trainData$V1 == i,]
+    valDataNormNonDigitAux = valDataNorm[valData$V1 == i,]
+    idxTrain <- sample(1:nrow(trainDataNormNonDigitAux), 666) # the number of the beast!!!
+    idxVal <- sample(1:nrow(valDataNormNonDigitAux), 200) 
+    
+    if (empty) {
+      trainDataNormNonDigit <- trainDataNormNonDigitAux[idxTrain,]
+      valDataNormNonDigit <- valDataNormNonDigitAux[idxVal,]
+      empty <- FALSE
+    }
+    else {
+      trainDataNormNonDigit <- rbind(trainDataNormNonDigit, trainDataNormNonDigitAux[idxTrain,])
+      valDataNormNonDigit <- rbind(valDataNormNonDigit, valDataNormNonDigitAux[idxVal,])
+    }
+  }
+  
+  # bind all rows of training data
+  pos <- cbind(V1=rep(1, dim(trainDataNormDigit)[1]), trainDataNormDigit)
+  neg <- cbind(V1=rep(-1, dim(trainDataNormNonDigit)[1]), trainDataNormNonDigit)
+  trainDataFinal <- rbind(pos, neg)
+  
+  # bind all rows of validation data
+  pos <- cbind(V1=rep(1, dim(valDataNormDigit)[1]), valDataNormDigit)
+  neg <- cbind(V1=rep(-1, dim(valDataNormNonDigit)[1]), valDataNormNonDigit)
+  valDataFinal <- rbind(pos, neg)
+
+  # train SVM model (need to grid search for better parameters)
+  # Check to do PCA
+  # check to extract feature like HOG
+  svmModel <- svm(formula = V1 ~ ., data = trainDataFinal, kernel= "radial", cost = 0.001, gamma = 0.1)
+  predictAndEvaluateSVM(svmModel, trainDataFinal) # 0.50 :(
+  predictAndEvaluateSVM(svmModel, valDataFinal)   # 0.50 :(
+  
+  # train NN model
+  # (DOn't believe on this result . It have something wrong :) )
+  nnModel = neuralnet(formula=f, data=trainDataFinal, hidden=c(5,3), linear.output=FALSE) 
+  #linear.output = FALSE --> classification (apply 'logistic' activation as default)
+  predictAndEvaluateNN(nnModel, trainDataFinal) #0.9792
+  predictAndEvaluateNN(nnModel, valDataFinal)   #0.9953  
+
+  # check how to save best model
+  
+  # check on confusion matrix if some number is more difficult to predict 
+  # and train a special model for it
+  
+#}
+
+# vooting method 
+# ideia to pass 3 times to model and after majority voot to define the class
+
+# final model prediction and confusion matrix on Training data
+  
+# final model prediction and confusion matrix on Validation data
+
+# load test data
+# Normalize test data (/255.0)
+# final model prediction and confusion matrix on Test data
