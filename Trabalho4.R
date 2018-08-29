@@ -123,7 +123,7 @@ for (i in 0:9) {
 trainDataNorm <- trainData[,-1] / 255.0
 valDataNorm <- valData[,-1] / 255.0
 
-digit <- 1 # for tests purpose
+#digit <- 1 # for tests purpose
 
 accPerDigit <- data.frame(digit=numeric(10), accTrain=numeric(10) , accVal=numeric(10))
 DIGITS <- 0:9
@@ -181,7 +181,7 @@ for (digit in DIGITS) {
   accPerDigit[digit+1,] <- c(digit, accTrain$ACCNorm, accVal$ACCNorm)
   
   # save models
-  #nnModels[[digit]] <- nnModel
+  nnModels[[toString(digit)]] <- nnModel
   
   # check how to save best model
   
