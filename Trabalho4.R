@@ -123,10 +123,11 @@ for (i in 0:9) {
 trainDataNorm <- trainData[,-1] / 255.0
 valDataNorm <- valData[,-1] / 255.0
 
-DIGITS <- 0:9
-digit <- 0
+digit <- 1 # for tests purpose
 
-#for (digit in DIGITS) {
+accPerDigit <- data.frame(digit=numeric(10), accTrain=numeric(10) , accVal=numeric(10))
+DIGITS <- 0:9
+for (digit in DIGITS) {
 
   # get train and val data for positive class data
   trainDataNormDigit = trainDataNorm[trainData$V1 == digit,]
@@ -134,7 +135,7 @@ digit <- 0
   
   empty <- TRUE
   # get train and val data for negative class data
-  for (i in DIGITS[-(digit+1)]) {
+  for (i in DIGITS[DIGITS != digit]) {
     trainDataNormNonDigitAux = trainDataNorm[trainData$V1 == i,]
     valDataNormNonDigitAux = valDataNorm[valData$V1 == i,]
     idxTrain <- sample(1:nrow(trainDataNormNonDigitAux), 666) # the number of the beast!!!
@@ -164,23 +165,30 @@ digit <- 0
   # train SVM model (need to grid search for better parameters)
   # Check to do PCA
   # check to extract feature like HOG
-  svmModel <- svm(formula = V1 ~ ., data = trainDataFinal, kernel= "radial", cost = 0.001, gamma = 0.1)
-  predictAndEvaluateSVM(svmModel, trainDataFinal) # 0.50 :(
-  predictAndEvaluateSVM(svmModel, valDataFinal)   # 0.50 :(
+  #svmModel <- svm(formula = V1 ~ ., data = trainDataFinal, kernel= "radial", cost = 0.001, gamma = 0.1)
+  #predictAndEvaluateSVM(svmModel, trainDataFinal) # 0.50 :(
+  #predictAndEvaluateSVM(svmModel, valDataFinal)   # 0.50 :(
   
   # train NN model
-  # (DOn't believe on this result . It have something wrong :) )
+  # (DOn't believe on this result . It must have something wrong :) )
   nnModel = neuralnet(formula=f, data=trainDataFinal, hidden=c(5,3), linear.output=FALSE) 
   #linear.output = FALSE --> classification (apply 'logistic' activation as default)
-  predictAndEvaluateNN(nnModel, trainDataFinal) #0.9792
-  predictAndEvaluateNN(nnModel, valDataFinal)   #0.9953  
-
+  print(paste("Predicting ", digit, " vs All", sep = ""))
+  accTrain <- predictAndEvaluateNN(nnModel, trainDataFinal) #0.9792
+  accVal <- predictAndEvaluateNN(nnModel, valDataFinal)   #0.9953  
+  print(accTrain)
+  print(accVal)
+  accPerDigit[digit+1,] <- c(digit, accTrain$ACCNorm, accVal$ACCNorm)
+  
+  # save models
+  #nnModels[[digit]] <- nnModel
+  
   # check how to save best model
   
   # check on confusion matrix if some number is more difficult to predict 
   # and train a special model for it
   
-#}
+}
 
 # vooting method 
 # ideia to pass 3 times to model and after majority voot to define the class
