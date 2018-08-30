@@ -124,7 +124,7 @@ trainDataNorm <- trainData[,-1] / 255.0
 valDataNorm <- valData[,-1] / 255.0
 
 #digit <- 1 # for tests purpose
-
+nnModels <- list()
 accPerDigit <- data.frame(digit=numeric(10), accTrain=numeric(10) , accVal=numeric(10))
 DIGITS <- 0:9
 for (digit in DIGITS) {
