@@ -45,6 +45,62 @@ predictAndEvaluateNN <- function(model, data){
   return(list(CM=CM, ACCNorm=ACCNorm))
 }
 
+train.svm_linear <- function(train, val) {
+  
+  gridSearchSVMModelsL <- list()
+  for (c in c(0.0001, 0.001, 0.01, 0.1, 1, 10)) {
+    set.seed(42)
+    svmModel <- svm(formula = V1 ~ ., data = train, kernel= "linear", cost = c, scale = FALSE)
+    print(paste("Predicting ", digit, " vs All - SVM (Liner) - c=", c, sep = ""))
+    accTrain <- predictAndEvaluateSVM(svmModel, train) # 0.50 :(
+    accVal <- predictAndEvaluateSVM(svmModel, val)   # 0.50 :(
+    print(accTrain)
+    print(accVal)
+    
+    gridSearchSVMModelsL[[toString(c)]] <- svmModel
+  }
+  return (gridSearchSVMModelsL)
+}
+
+train.svm_rbf <- function(train, val) {
+  
+  gridSearchSVMModelsR <- list()
+  for (c in c(0.0001, 0.001, 0.01, 0.1, 1, 10)) {
+    for (g in c(0.0001, 0.001, 0.01, 0.1, 1, 10)) {
+      set.seed(42)
+      svmModel <- svm(formula = V1 ~ ., data = train, kernel= "radial", cost = c, gamma = g, scale = FALSE)
+      print(paste("Predicting ", digit, " vs All - SVM (RBF) - c=", c, "-g=", g, sep = ""))
+      accTrain <- predictAndEvaluateSVM(svmModel, train) # 0.50 :(
+      accVal <- predictAndEvaluateSVM(svmModel, val)   # 0.50 :(
+      print(accTrain)
+      print(accVal)
+      
+      gridSearchSVMModelsR[[paste(toString(c), toString(g))]] <- svmModel
+    }
+  }
+  return (gridSearchSVMModelsR)
+}
+
+train.neuralnet <- function(train, val) {
+  # train NN model
+  gridSearchNNModels <- list()
+  # (DOn't believe on this result . It must have something wrong :) )
+  nets <- list(c(5,3), c(7,3), c(7,5,3))
+  for (net in nets) {
+    set.seed(42)
+    nnModel = neuralnet(formula=f, data=train, hidden=net, linear.output=FALSE) 
+    #linear.output = FALSE --> classification (apply 'logistic' activation as default)
+    print(paste("Predicting ", digit, " vs All - NN - ", toString(net), sep = ""))
+    accTrain <- predictAndEvaluateNN(nnModel, train) #0.9792
+    accVal <- predictAndEvaluateNN(nnModel, val)   #0.9953  
+    print(accTrain)
+    print(accVal)
+    
+    gridSearchNNModels[[toString(net)]] <- nnModel
+  }
+  return (gridSearchNNModels)
+}
+
 set.seed(42)
 #setwd("/Users/thiagom/Documents/Studies/Unicamp/MDC/INF-615/Tarefas/INF0615_Tarefa4/")
 setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
@@ -53,6 +109,7 @@ setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
 # A primeira feature/coluna (V1) é a classe 
 # As colunas V2 ~ V785 são os pixels de cada imagem 28x28 em tons de cinza. 
 data = read.csv("mnist_trainVal.csv", header=FALSE)
+dataTest = read.csv("mnist_test.csv", header=FALSE)
 
 #Inspecionando o número de exemplos por classe
 summary(as.factor(data[,1]))
@@ -104,7 +161,7 @@ empty <- TRUE
 # split the data from each class into train and val
 for (i in 0:9) {
   numberData <- data[data[,1]==i, ]
-  
+  set.seed(42)
   idx <- sample(1:nrow(numberData), 0.8*nrow(numberData))
   print (length(idx))
   trainNbrData <- numberData[idx,]
@@ -125,6 +182,8 @@ valDataNorm <- valData[,-1] / 255.0
 
 #digit <- 1 # for tests purpose
 nnModels <- list()
+svmModelsL <- list()
+svmModelsR <- list()
 accPerDigit <- data.frame(digit=numeric(10), accTrain=numeric(10) , accVal=numeric(10))
 DIGITS <- 0:9
 for (digit in DIGITS) {
@@ -136,6 +195,7 @@ for (digit in DIGITS) {
   empty <- TRUE
   # get train and val data for negative class data
   for (i in DIGITS[DIGITS != digit]) {
+    set.seed(42)
     trainDataNormNonDigitAux = trainDataNorm[trainData$V1 == i,]
     valDataNormNonDigitAux = valDataNorm[valData$V1 == i,]
     idxTrain <- sample(1:nrow(trainDataNormNonDigitAux), 666) # the number of the beast!!!
@@ -165,32 +225,19 @@ for (digit in DIGITS) {
   # train SVM model (need to grid search for better parameters)
   # Check to do PCA
   # check to extract feature like HOG
-  #svmModel <- svm(formula = V1 ~ ., data = trainDataFinal, kernel= "radial", cost = 0.001, gamma = 0.1)
-  #predictAndEvaluateSVM(svmModel, trainDataFinal) # 0.50 :(
-  #predictAndEvaluateSVM(svmModel, valDataFinal)   # 0.50 :(
   
-  # train NN model
-  # (DOn't believe on this result . It must have something wrong :) )
-  nnModel = neuralnet(formula=f, data=trainDataFinal, hidden=c(5,3), linear.output=FALSE) 
-  #linear.output = FALSE --> classification (apply 'logistic' activation as default)
-  print(paste("Predicting ", digit, " vs All", sep = ""))
-  accTrain <- predictAndEvaluateNN(nnModel, trainDataFinal) #0.9792
-  accVal <- predictAndEvaluateNN(nnModel, valDataFinal)   #0.9953  
-  print(accTrain)
-  print(accVal)
-  accPerDigit[digit+1,] <- c(digit, accTrain$ACCNorm, accVal$ACCNorm)
+  svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal)
   
-  # save models
-  nnModels[[toString(digit)]] <- nnModel
+  #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal)
   
-  # check how to save best model
-  
+  nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal)
+
   # check on confusion matrix if some number is more difficult to predict 
   # and train a special model for it
-  
 }
 
 # vooting method 
+
 # ideia to pass 3 times to model and after majority voot to define the class
 
 # final model prediction and confusion matrix on Training data
