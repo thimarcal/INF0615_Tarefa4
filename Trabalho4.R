@@ -49,10 +49,10 @@ predictAndEvaluateNN <- function(model, data){
   return(list(CM=CM, ACCNorm=ACCNorm))
 }
 
-train.svm_linear <- function(train, val) {
+train.svm_linear <- function(train, val, cost) {
   
   gridSearchSVMModelsL <- list()
-  for (c in c(0.0001, 0.001, 0.01, 0.1, 1)) {
+  for (c in cost) {
     set.seed(42)
     print(paste("Training ", digit, " vs All - SVM (Liner) - c=", c, sep = ""))
     
@@ -67,11 +67,11 @@ train.svm_linear <- function(train, val) {
   return (gridSearchSVMModelsL)
 }
 
-train.svm_rbf <- function(train, val) {
+train.svm_rbf <- function(train, val, cost, gamma) {
   
   gridSearchSVMModelsR <- list()
-  for (c in c(0.0001, 0.001, 0.01, 0.1, 1)) {
-    for (g in c(0.0001, 0.001, 0.01, 0.1, 1)) {
+  for (c in cost) {
+    for (g in gamma) {
       set.seed(42)
       print(paste("Training ", digit, " vs All - SVM (RBF) - c=", c, "-g=", g, sep = ""))
       
@@ -87,11 +87,11 @@ train.svm_rbf <- function(train, val) {
   return (gridSearchSVMModelsR)
 }
 
-train.neural_net <- function(train, val) {
+train.neural_net <- function(train, val, nets) {
   # train NN model
   gridSearchNNModels <- list()
   # (DOn't believe on this result . It must have something wrong :) )
-  nets <- list(c(5,3), c(7,3), c(7,5,3))
+  #nets <- list(c(5,3), c(7,3), c(7,5,3))
   for (net in nets) {
     set.seed(42)
     print(paste("Training ", digit, " vs All - NN - ", toString(net), sep = ""))
@@ -129,6 +129,27 @@ bestmodel.predict <- function(bestModels, data) {
   return (colnames(pred_value)[apply(pred_value,1,which.max)])
 } 
 
+########################################################################
+# Métodos auxiliares para visualização das Imagens                     #
+########################################################################
+
+# Função para plotar uma imagem a partir de um único feature vector
+# imgArray = fv da imagem, com classe na V1 e os pixels em V2 ~ V785
+# os pixels podem estar no intervalo [0.0,1.0] ou [0, 255]
+plotImage = function(imgArray){
+  # Transforma array em uma matrix 28x28 (ignorando a classe em V1)
+  imgMatrix = matrix((imgArray[2:ncol(imgArray)]), nrow=28, ncol=28)
+  
+  # Transforma cada elemento em numeric
+  im_numbers <- apply(imgMatrix, 2, as.numeric)
+  
+  # Girando a imagem apenas p/ o plot
+  flippedImg = im_numbers[,28:1]
+  
+  image(1:28, 1:28, flippedImg, col=gray((0:255)/255), xlab="", ylab="")
+  title(imgArray[1])
+}
+
 set.seed(42)
 #setwd("/Users/thiagom/Documents/Studies/Unicamp/MDC/INF-615/Tarefas/INF0615_Tarefa4/")
 setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
@@ -140,27 +161,6 @@ data = read.csv("mnist_trainVal.csv", header=FALSE)
 
 #Inspecionando o número de exemplos por classe
 summary(as.factor(data[,1]))
-
-########################################################################
-# Métodos auxiliares para visualização das Imagens                     #
-########################################################################
-
-# Função para plotar uma imagem a partir de um único feature vector
-# imgArray = fv da imagem, com classe na V1 e os pixels em V2 ~ V785
-# os pixels podem estar no intervalo [0.0,1.0] ou [0, 255]
-plotImage = function(imgArray){
-	# Transforma array em uma matrix 28x28 (ignorando a classe em V1)
-	imgMatrix = matrix((imgArray[2:ncol(imgArray)]), nrow=28, ncol=28)
-
-	# Transforma cada elemento em numeric
-	im_numbers <- apply(imgMatrix, 2, as.numeric)
-
-	# Girando a imagem apenas p/ o plot
-	flippedImg = im_numbers[,28:1]
-
-	image(1:28, 1:28, flippedImg, col=gray((0:255)/255), xlab="", ylab="")
-	title(imgArray[1])
-}
 
 #Ex de uso pegando o primeiro sample
 plotImage(data[1,])
@@ -254,18 +254,27 @@ for (digit in DIGITS) {
   # Check to do PCA
   # check to extract feature like HOG
   
-  #svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal)
+  # grid search
+  #svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal, c(0.0001, 0.001, 0.01, 0.1, 1))
+  # train best model
+  #svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal, c(0.001))
   
-  #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal)
+  # grid search
+  #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal, c(0.0001, 0.001, 0.01, 0.1, 1), c(0.0001, 0.001, 0.01, 0.1, 1))
+  # train best model
+  #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal, c(0.001), c( 0.01))
   
-  #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal)
+  # grid search
+  #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3), c(7,3), c(7,5,3)))
+  # train best model
+  #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)))
 
   # check on confusion matrix if some number is more difficult to predict 
   # and train a special model for it
 }
 
-bestModels <- list()
 # need to choose best models
+bestModels <- list()
 for (i in DIGITS) {
   bestModels[[toString(i)]] <- nnModels[[toString(i)]][["5, 3"]]
 }
@@ -305,5 +314,11 @@ confusionMatrix(val_true, val_pred)
 # load test data
 testData = read.csv("mnist_test.csv", header=FALSE)
 # Normalize test data (/255.0)
-testDataNorm <- dataTest[,-1] / 255.0
-# final model prediction and confusion matrix on Test data
+testDataNorm <- testData[,-1] / 255.0
+# final model prediction 
+test_pred <-  bestmodel.predict(bestModels, testDataNorm)
+test_pred <- as.factor(test_pred)
+test_true <- as.factor(testData$V1)
+# confusion matrix on Test data
+table(test_true, test_pred, dnn=c("True Values", "Prediction"))
+confusionMatrix(test_true, test_pred)
