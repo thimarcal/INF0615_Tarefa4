@@ -1,0 +1,1056 @@
+[1] "Training 0 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5990    4
+    1  1209 3529
+
+$ACCNorm
+[1] 0.8720808539
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1798    2
+    1   315  870
+
+$ACCNorm
+[1] 0.866533052
+
+[1] "Training 0 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5986    8
+    1   773 3965
+
+$ACCNorm
+[1] 0.917758162
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1795    5
+    1   189  996
+
+$ACCNorm
+[1] 0.9188642757
+
+[1] "Training 0 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5987    7
+    1   664 4074
+
+$ACCNorm
+[1] 0.9293443225
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1791    9
+    1   170 1015
+
+$ACCNorm
+[1] 0.9257700422
+
+[1] "Training 0 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5988    6
+    1   628 4110
+
+$ACCNorm
+[1] 0.9332268106
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1792    8
+    1   165 1020
+
+$ACCNorm
+[1] 0.9281575246
+
+[1] "Training 0 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5986    8
+    1   617 4121
+
+$ACCNorm
+[1] 0.9342208045
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1791    9
+    1   161 1024
+
+$ACCNorm
+[1] 0.9295675105
+
+[1] "Training 1 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5966   28
+    1   405 4988
+
+$ACCNorm
+[1] 0.9601156568
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1786   14
+    1   107 1242
+
+$ACCNorm
+[1] 0.9564521044
+
+[1] "Training 1 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5960   34
+    1   376 5017
+
+$ACCNorm
+[1] 0.9623038268
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1788   12
+    1    99 1250
+
+$ACCNorm
+[1] 0.9599728194
+
+[1] "Training 1 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5953   41
+    1   344 5049
+
+$ACCNorm
+[1] 0.9646867184
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1787   13
+    1    88 1261
+
+$ACCNorm
+[1] 0.9637721357
+
+[1] "Training 1 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5953   41
+    1   331 5062
+
+$ACCNorm
+[1] 0.9658919844
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1785   15
+    1    86 1263
+
+$ACCNorm
+[1] 0.96395787
+
+[1] "Training 1 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5952   42
+    1   322 5071
+
+$ACCNorm
+[1] 0.9666429827
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1786   14
+    1    84 1265
+
+$ACCNorm
+[1] 0.9649769376
+
+[1] "Training 2 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5985    9
+    1  2431 2335
+
+$ACCNorm
+[1] 0.7442135799
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1797    3
+    1   633  559
+
+$ACCNorm
+[1] 0.7336465324
+
+[1] "Training 2 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5975   19
+    1  1886 2880
+
+$ACCNorm
+[1] 0.8005552412
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1794    6
+    1   493  699
+
+$ACCNorm
+[1] 0.7915380313
+
+[1] "Training 2 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5976   18
+    1  1704 3062
+
+$ACCNorm
+[1] 0.8197322375
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1788   12
+    1   452  740
+
+$ACCNorm
+[1] 0.8070693512
+
+[1] "Training 2 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5972   22
+    1  1646 3120
+
+$ACCNorm
+[1] 0.8254833376
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1786   14
+    1   453  739
+
+$ACCNorm
+[1] 0.8060943326
+
+[1] "Training 2 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5967   27
+    1  1595 3171
+
+$ACCNorm
+[1] 0.8304166525
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1785   15
+    1   443  749
+
+$ACCNorm
+[1] 0.8100111857
+
+[1] "Training 3 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5959   35
+    1  2152 2752
+
+$ACCNorm
+[1] 0.7776676894
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1790   10
+    1   550  677
+
+$ACCNorm
+[1] 0.7730983428
+
+[1] "Training 3 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5959   35
+    1  1699 3205
+
+$ACCNorm
+[1] 0.8238544757
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1786   14
+    1   429  798
+
+$ACCNorm
+[1] 0.8212944852
+
+[1] "Training 3 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5953   41
+    1  1550 3354
+
+$ACCNorm
+[1] 0.8385456555
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1785   15
+    1   395  832
+
+$ACCNorm
+[1] 0.8348716381
+
+[1] "Training 3 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5952   42
+    1  1508 3396
+
+$ACCNorm
+[1] 0.8427444573
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1782   18
+    1   388  839
+
+$ACCNorm
+[1] 0.8368907905
+
+[1] "Training 3 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5953   41
+    1  1484 3420
+
+$ACCNorm
+[1] 0.8452748562
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1780   20
+    1   386  841
+
+$ACCNorm
+[1] 0.8371502309
+
+[1] "Training 4 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5952   42
+    1  1560 3113
+
+$ACCNorm
+[1] 0.8295801687
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1787   13
+    1   371  798
+
+$ACCNorm
+[1] 0.8377062542
+
+[1] "Training 4 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5939   55
+    1  1104 3569
+
+$ACCNorm
+[1] 0.8772866775
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1790   10
+    1   259  910
+
+$ACCNorm
+[1] 0.8864437791
+
+[1] "Training 4 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5941   53
+    1   920 3753
+
+$ACCNorm
+[1] 0.8971410779
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1787   13
+    1   226  943
+
+$ACCNorm
+[1] 0.8997250737
+
+[1] "Training 4 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5934   60
+    1   792 3881
+
+$ACCNorm
+[1] 0.9102528593
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1782   18
+    1   206  963
+
+$ACCNorm
+[1] 0.9068905047
+
+[1] "Training 4 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5941   53
+    1   748 3925
+
+$ACCNorm
+[1] 0.915544673
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1776   24
+    1   204  965
+
+$ACCNorm
+[1] 0.90607927
+
+[1] "Training 5 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5923   71
+    1  2617 1719
+
+$ACCNorm
+[1] 0.6923015805
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1773   27
+    1   647  438
+
+$ACCNorm
+[1] 0.694343318
+
+[1] "Training 5 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5881  113
+    1  1562 2774
+
+$ACCNorm
+[1] 0.810453981
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1766   34
+    1   364  721
+
+$ACCNorm
+[1] 0.8228136201
+
+[1] "Training 5 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5885  109
+    1  1335 3001
+
+$ACCNorm
+[1] 0.8369638473
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1773   27
+    1   324  761
+
+$ACCNorm
+[1] 0.8431912442
+
+[1] "Training 5 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5898   96
+    1  1262 3074
+
+$ACCNorm
+[1] 0.8464661617
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1771   29
+    1   322  763
+
+$ACCNorm
+[1] 0.8435573477
+
+[1] "Training 5 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5892  102
+    1  1242 3094
+
+$ACCNorm
+[1] 0.8482719343
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1770   30
+    1   320  765
+
+$ACCNorm
+[1] 0.8442012289
+
+[1] "Training 6 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5981   13
+    1  1373 3361
+
+$ACCNorm
+[1] 0.8539007956
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1797    3
+    1   351  833
+
+$ACCNorm
+[1] 0.8509403153
+
+[1] "Training 6 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5969   25
+    1   984 3750
+
+$ACCNorm
+[1] 0.8939855572
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1795    5
+    1   253  931
+
+$ACCNorm
+[1] 0.8917698949
+
+[1] "Training 6 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5958   36
+    1   896 3838
+
+$ACCNorm
+[1] 0.9023624385
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1794    6
+    1   244  940
+
+$ACCNorm
+[1] 0.8952927928
+
+[1] "Training 6 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5955   39
+    1   889 3845
+
+$ACCNorm
+[1] 0.9028515207
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1794    6
+    1   243  941
+
+$ACCNorm
+[1] 0.8957150901
+
+[1] "Training 6 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5956   38
+    1   875 3859
+
+$ACCNorm
+[1] 0.9044136024
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1793    7
+    1   238  946
+
+$ACCNorm
+[1] 0.8975487988
+
+[1] "Training 7 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5985    9
+    1  1709 3303
+
+$ACCNorm
+[1] 0.8287584272
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1796    4
+    1   430  823
+
+$ACCNorm
+[1] 0.8273007005
+
+[1] "Training 7 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5970   24
+    1  1275 3737
+
+$ACCNorm
+[1] 0.8708032654
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1797    3
+    1   325  928
+
+$ACCNorm
+[1] 0.8694779197
+
+[1] "Training 7 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5953   41
+    1  1194 3818
+
+$ACCNorm
+[1] 0.8774657871
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1793    7
+    1   303  950
+
+$ACCNorm
+[1] 0.8771457391
+
+[1] "Training 7 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5939   55
+    1  1173 3839
+
+$ACCNorm
+[1] 0.8783929247
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1791    9
+    1   288  965
+
+$ACCNorm
+[1] 0.882575818
+
+[1] "Training 7 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5940   54
+    1  1144 3868
+
+$ACCNorm
+[1] 0.8813693981
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1791    9
+    1   284  969
+
+$ACCNorm
+[1] 0.8841719872
+
+[1] "Training 8 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5958   36
+    1  2593 2087
+
+$ACCNorm
+[1] 0.7199670825
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1790   10
+    1   651  520
+
+$ACCNorm
+[1] 0.7192546731
+
+[1] "Training 8 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5933   61
+    1  1982 2698
+
+$ACCNorm
+[1] 0.7831594415
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1779   21
+    1   510  661
+
+$ACCNorm
+[1] 0.7764040706
+
+[1] "Training 8 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5927   67
+    1  1828 2852
+
+$ACCNorm
+[1] 0.7991119324
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1778   22
+    1   479  692
+
+$ACCNorm
+[1] 0.7893628428
+
+[1] "Training 8 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5923   71
+    1  1761 2919
+
+$ACCNorm
+[1] 0.8059363851
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1773   27
+    1   466  705
+
+$ACCNorm
+[1] 0.7935247652
+
+[1] "Training 8 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5922   72
+    1  1737 2943
+
+$ACCNorm
+[1] 0.8084170709
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1775   25
+    1   466  705
+
+$ACCNorm
+[1] 0.7940803207
+
+[1] "Training 9 vs All - SVM (Liner) - c=0.0001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5775  219
+    1  1722 3037
+
+$ACCNorm
+[1] 0.8008113703
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1717   83
+    1   411  779
+
+$ACCNorm
+[1] 0.8042553688
+
+[1] "Training 9 vs All - SVM (Liner) - c=0.001"
+$CM
+      Predicted
+Actual    0    1
+    -1 5806  188
+    1  1125 3634
+
+$ACCNorm
+[1] 0.8661205508
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1722   78
+    1   300  890
+
+$ACCNorm
+[1] 0.8522829132
+
+[1] "Training 9 vs All - SVM (Liner) - c=0.01"
+$CM
+      Predicted
+Actual    0    1
+    -1 5774  220
+    1  1015 3744
+
+$ACCNorm
+[1] 0.8750082646
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1715   85
+    1   276  914
+
+$ACCNorm
+[1] 0.8604225023
+
+[1] "Training 9 vs All - SVM (Liner) - c=0.1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5755  239
+    1   989 3770
+
+$ACCNorm
+[1] 0.8761550126
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1709   91
+    1   270  920
+
+$ACCNorm
+[1] 0.8612768441
+
+[1] "Training 9 vs All - SVM (Liner) - c=1"
+$CM
+      Predicted
+Actual    0    1
+    -1 5754  240
+    1   991 3768
+
+$ACCNorm
+[1] 0.8758614677
+
+$CM
+      Predicted
+Actual    0    1
+    -1 1704   96
+    1   270  920
+
+$ACCNorm
+[1] 0.8598879552
+
+
+
+
+
+
+          Prediction
+True Values    0    1    2    3    4    5    6    7    8    9
+          0 4597   14   44   19    9   13    5   16   13    8
+          1    1 5204   71   35   18   33    1   11    6   13
+          2   15   21 4403  103   74    3    6   90   18   33
+          3   14   38   90 4421   17  112    7   79   50   76
+          4    8   16   14    4 4490    2    7   24    2  106
+          5   48    3   21  154   77 3885   22    9   18   99
+          6   70   28  133    6   59   86 4341    1    8    2
+          7    4   15   18   11   48    8    0 4820    7   81
+          8   31  106   85   75   43  208   44   49 3926  113
+          9   16   19    7   45   93   18    2  157   42 4360
+> # final model prediction and confusion matrix on Validation data
+> table(val_true, val_pred, dnn=c("True Values", "Prediction"))
+           Prediction
+True Values    0    1    2    3    4    5    6    7    8    9
+          0 1133    4   16    7    2    8    5    5    3    2
+          1    0 1282   19    9    3   14    1    6    8    7
+          2    7   13 1052   30   25    3    6   21   23   12
+          3    3   17   42 1057    3   36    1   18   26   24
+          4    5    5    7    1 1094    1    4   10    5   37
+          5   12    5   13   45   25  949    8    0    5   23
+          6   19   13   49    2   12   35 1047    0    7    0
+          7    6    8   10    3   20    3    0 1175    2   26
+          8    9   35   25   25   14   58   17   14  939   35
+          9    8   11    5   13   35   12    0   37   13 1056
+> confusionMatrix(train_true, train_pred)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1    2    3    4    5    6    7    8    9
+         0 4597   14   44   19    9   13    5   16   13    8
+         1    1 5204   71   35   18   33    1   11    6   13
+         2   15   21 4403  103   74    3    6   90   18   33
+         3   14   38   90 4421   17  112    7   79   50   76
+         4    8   16   14    4 4490    2    7   24    2  106
+         5   48    3   21  154   77 3885   22    9   18   99
+         6   70   28  133    6   59   86 4341    1    8    2
+         7    4   15   18   11   48    8    0 4820    7   81
+         8   31  106   85   75   43  208   44   49 3926  113
+         9   16   19    7   45   93   18    2  157   42 4360
+
+Overall Statistics
+                                                  
+               Accuracy : 0.9260756               
+                 95% CI : (0.9236985, 0.928401)   
+    No Information Rate : 0.1138452               
+    P-Value [Acc > NIR] : < 0.00000000000000022204
+                                                  
+                  Kappa : 0.9178307               
+ Mcnemar's Test P-Value : < 0.00000000000000022204
+
+Statistics by Class:
+
+                       Class: 0  Class: 1   Class: 2   Class: 3   Class: 4   Class: 5   Class: 6  Class: 7   Class: 8   Class: 9
+Sensitivity          0.95691091 0.9524158 0.90114613 0.90724400 0.91112013 0.88942308 0.97880496 0.9170472 0.95990220 0.89143324
+Specificity          0.99673543 0.9955562 0.99157948 0.98879922 0.99575081 0.98966237 0.99097796 0.9955076 0.98282656 0.99074332
+Pos Pred Value       0.97024061 0.9649546 0.92383550 0.90150897 0.96083886 0.89598708 0.91698352 0.9616919 0.83888889 0.91615886
+Neg Pred Value       0.99521465 0.9938970 0.98882694 0.98951057 0.98988966 0.98893699 0.99782714 0.9898565 0.99621378 0.98771857
+Prevalence           0.10009376 0.1138452 0.10180227 0.10153141 0.10267736 0.09100948 0.09240546 0.1095114 0.08521721 0.10190645
+Detection Rate       0.09578081 0.1084280 0.09173872 0.09211376 0.09355141 0.08094593 0.09044692 0.1004271 0.08180019 0.09084280
+Detection Prevalence 0.09871862 0.1123659 0.09930201 0.10217731 0.09736431 0.09034274 0.09863527 0.1044275 0.09751016 0.09915616
+Balanced Accuracy    0.97682317 0.9739860 0.94636281 0.94802161 0.95343547 0.93954272 0.98489146 0.9562774 0.97136438 0.94108828
+> confusionMatrix(val_true, val_pred)
+Confusion Matrix and Statistics
+
+          Reference
+Prediction    0    1    2    3    4    5    6    7    8    9
+         0 1133    4   16    7    2    8    5    5    3    2
+         1    0 1282   19    9    3   14    1    6    8    7
+         2    7   13 1052   30   25    3    6   21   23   12
+         3    3   17   42 1057    3   36    1   18   26   24
+         4    5    5    7    1 1094    1    4   10    5   37
+         5   12    5   13   45   25  949    8    0    5   23
+         6   19   13   49    2   12   35 1047    0    7    0
+         7    6    8   10    3   20    3    0 1175    2   26
+         8    9   35   25   25   14   58   17   14  939   35
+         9    8   11    5   13   35   12    0   37   13 1056
+
+Overall Statistics
+                                                  
+               Accuracy : 0.8982924               
+                 95% CI : (0.8927468, 0.9036439)  
+    No Information Rate : 0.116035                
+    P-Value [Acc > NIR] : < 0.00000000000000022204
+                                                  
+                  Kappa : 0.8869501               
+ Mcnemar's Test P-Value : NA                      
+
+Statistics by Class:
+
+                       Class: 0  Class: 1   Class: 2   Class: 3   Class: 4   Class: 5   Class: 6   Class: 7   Class: 8   Class: 9
+Sensitivity          0.94259567 0.9203159 0.84975767 0.88674497 0.88726683 0.84807864 0.96143251 0.91368585 0.91076625 0.86415712
+Specificity          0.99518652 0.9936864 0.98699731 0.98427818 0.99303750 0.98750689 0.98744962 0.99272320 0.97885912 0.98757303
+Pos Pred Value       0.95611814 0.9503336 0.88255034 0.86145069 0.93584260 0.87465438 0.88429054 0.93774940 0.80187874 0.88739496
+Neg Pred Value       0.99362292 0.9895833 0.98279848 0.98747449 0.98717239 0.98443223 0.99611866 0.98967634 0.99150821 0.98465095
+Prevalence           0.10012495 0.1160350 0.10312370 0.09929196 0.10270721 0.09321116 0.09071220 0.10712203 0.08588088 0.10179092
+Detection Rate       0.09437734 0.1067888 0.08763015 0.08804665 0.09112870 0.07905040 0.08721366 0.09787589 0.07821741 0.08796335
+Detection Prevalence 0.09870887 0.1123698 0.09929196 0.10220741 0.09737609 0.09037901 0.09862557 0.10437318 0.09754269 0.09912536
+Balanced Accuracy    0.96889110 0.9570011 0.91837749 0.93551158 0.94015217 0.91779277 0.97444106 0.95320452 0.94481268 0.92586508
+> 

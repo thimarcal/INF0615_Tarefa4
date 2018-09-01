@@ -3,8 +3,12 @@
 # Alunos: Rafael Fernando Ribeiro                                      #
 #         Thiago Gomes Marcal Pereira                                  #
 ########################################################################
+#install.packages("e1071")
+#install.packages("neuralnet")
+#install.packages("caret")
 library(e1071)
 library(neuralnet)
+library(caret)
 
 # Predict data using model and evaluate
 predictAndEvaluateSVM <- function(model, data){
@@ -103,6 +107,27 @@ train.neural_net <- function(train, val) {
   }
   return (gridSearchNNModels)
 }
+
+bestmodel.predict <- function(bestModels, data) {
+  pred_value <-  data.frame()
+  for (i in DIGITS) {
+    set.seed(42)
+    nnComputeV <-  compute(bestModels[[toString(i)]], data)
+    
+    if (nrow(pred_value) == 0) {
+      pred_value <- nnComputeV$net.result
+    } 
+    else {
+      pred_value <- cbind(pred_value, nnComputeV$net.result)
+    }
+  }
+  # name the colummns to get class easily on the vooting
+  colnames(pred_value) <- 0:9
+  
+  # vooting method
+  # get the column of maximum value on the prediction to get the class 
+  return (colnames(pred_value)[apply(pred_value,1,which.max)])
+} 
 
 set.seed(42)
 #setwd("/Users/thiagom/Documents/Studies/Unicamp/MDC/INF-615/Tarefas/INF0615_Tarefa4/")
@@ -233,31 +258,48 @@ for (digit in DIGITS) {
   
   #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal)
   
-  nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal)
+  #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal)
 
   # check on confusion matrix if some number is more difficult to predict 
   # and train a special model for it
 }
 
-# vooting method 
-pred_result <-  dataframe()
-
+bestModels <- list()
+# need to choose best models
 for (i in DIGITS) {
-  nnCompute <-  compute(bestModels[[toString(i)]], data[,-1])
-  pred_result$i <- nnCompute$net.result
+  bestModels[[toString(i)]] <- nnModels[[toString(i)]][["5, 3"]]
 }
-# check class
 
+# predict class for each model on the training and validation data (will create a function for it) 
+train_pred <-  bestmodel.predict(bestModels, trainDataNorm)
+val_pred <-  bestmodel.predict(bestModels, valDataNorm)
+
+train_pred <- as.factor(train_pred)
+val_pred <- as.factor(val_pred)
+
+train_true <- as.factor(trainData$V1)
+val_true <- as.factor(valData$V1)
+
+# generate confusion matrix
 # print confusion matrix
+# final model prediction and confusion matrix on Training data
+table(train_true, train_pred, dnn=c("True Values", "Prediction"))
+# final model prediction and confusion matrix on Validation data
+table(val_true, val_pred, dnn=c("True Values", "Prediction"))
 
+confusionMatrix(train_true, train_pred)
+confusionMatrix(val_true, val_pred)
+
+# need to calculate the normalized accuracy of the train and val data
 # print normalized accuracy
+
 
 
 # ideia to pass 3 times to model and after majority voot to define the class
 
-# final model prediction and confusion matrix on Training data
+
   
-# final model prediction and confusion matrix on Validation data
+
 
 
 # load test data
