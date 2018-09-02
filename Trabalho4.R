@@ -38,7 +38,7 @@ predictAndEvaluateNN <- function(model, data){
   prediction[prediction < 0.5] = -1
   prediction[prediction >= 0.5] = 1
   
-  CM = as.matrix(table(Actual = data$V1, Predicted = prediction))
+  CM = as.matrix(table(Actual = data[,1], Predicted = prediction))
   if (dim(CM)[2] == 1) {
     CM <- cbind(CM, c(0,0))
   }
@@ -112,7 +112,7 @@ bestmodel.predict <- function(bestModels, data) {
   pred_value <-  data.frame()
   for (i in DIGITS) {
     set.seed(42)
-    nnComputeV <-  compute(bestModels[[toString(i)]], data)
+    nnComputeV <-  compute(bestModels[[toString(i)]][["5, 3"]], data)
     
     if (nrow(pred_value) == 0) {
       pred_value <- nnComputeV$net.result
@@ -129,6 +129,39 @@ bestmodel.predict <- function(bestModels, data) {
   return (colnames(pred_value)[apply(pred_value,1,which.max)])
 } 
 
+bestmodel.predict_novo <- function(pred, nnModels, nnModelsOvO, trainData) {
+  val_pred2 <- pred
+  
+  for (digit in DIGITS) {
+    if (!is.null(nnModelsOvO[[toString(digit)]])) {
+      pred_value <-  data.frame()
+      
+      nnComputeV <-  compute(nnModels[[toString(digit)]][["5, 3"]], trainData[pred == digit,])    
+      pred_value <- nnComputeV$net.result
+      
+      for (i in models[[toString(digit)]]) {
+        set.seed(42)
+        nnComputeV <-  compute(nnModelsOvO[[toString(digit)]][[toString(i)]][["5, 3"]], trainData[pred == digit,])
+        
+        if (nrow(pred_value) == 0) {
+          pred_value <- nnComputeV$net.result
+        } 
+        else {
+          pred_value <- cbind(pred_value, nnComputeV$net.result)
+        }
+      }
+      # name the colummns to get class easily on the vooting
+      colnames(pred_value) <- c(digit, models[[toString(digit)]])
+      
+      # vooting method
+      # get the column of maximum value on the prediction to get the class 
+      pred_value <- colnames(pred_value)[apply(pred_value,1,which.max)]
+      val_pred2[pred == digit] <- pred_value
+    }
+  }
+  val_pred2 <- as.factor(val_pred2)
+  return (val_pred2)
+}
 ########################################################################
 # Métodos auxiliares para visualização das Imagens                     #
 ########################################################################
@@ -202,17 +235,18 @@ for (i in 0:9) {
     valData <- rbind(valData, valNbrData)
   }
 }
+rm(data)
 
 # normalize data dividing by 255 as all images are from 0~255
 trainDataNorm <- trainData[,-1] / 255.0
 valDataNorm <- valData[,-1] / 255.0
+trainDataNorm <- sapply( trainDataNorm, as.numeric )
+valDataNorm <- sapply( valDataNorm, as.numeric )
 
-
-#digit <- 1 # for tests purpose
+# One vs All method
 nnModels <- list()
 svmModelsL <- list()
 svmModelsR <- list()
-accPerDigit <- data.frame(digit=numeric(10), accTrain=numeric(10) , accVal=numeric(10))
 DIGITS <- 0:9
 for (digit in DIGITS) {
 
@@ -267,21 +301,22 @@ for (digit in DIGITS) {
   # grid search
   #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3), c(7,3), c(7,5,3)))
   # train best model
-  #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)))
+  nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)))
 
   # check on confusion matrix if some number is more difficult to predict 
   # and train a special model for it
 }
 
-# need to choose best models
-bestModels <- list()
-for (i in DIGITS) {
-  bestModels[[toString(i)]] <- nnModels[[toString(i)]][["5, 3"]]
-}
+# need to choose best models 
+# comment to reduce memory usage
+#bestModels <- list()
+#for (i in DIGITS) {
+#  bestModels[[toString(i)]] <- nnModels[[toString(i)]][["5, 3"]]
+#}
 
 # predict class for each model on the training and validation data (will create a function for it) 
-train_pred <-  bestmodel.predict(bestModels, trainDataNorm)
-val_pred <-  bestmodel.predict(bestModels, valDataNorm)
+train_pred <-  bestmodel.predict(nnModels, trainDataNorm)
+val_pred <-  bestmodel.predict(nnModels, valDataNorm)
 
 train_pred <- as.factor(train_pred)
 val_pred <- as.factor(val_pred)
@@ -292,33 +327,90 @@ val_true <- as.factor(valData$V1)
 # generate confusion matrix
 # print confusion matrix
 # final model prediction and confusion matrix on Training data
-table(train_true, train_pred, dnn=c("True Values", "Prediction"))
+table(train_pred, train_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(train_pred, train_true)
 # final model prediction and confusion matrix on Validation data
-table(val_true, val_pred, dnn=c("True Values", "Prediction"))
-
-confusionMatrix(train_true, train_pred)
-confusionMatrix(val_true, val_pred)
+table(val_pred, val_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred, val_true)
 
 # need to calculate the normalized accuracy of the train and val data
 # print normalized accuracy
-
-
-
-# ideia to pass 3 times to model and after majority voot to define the class
-
-
-  
-
 
 
 # load test data
 testData = read.csv("mnist_test.csv", header=FALSE)
 # Normalize test data (/255.0)
 testDataNorm <- testData[,-1] / 255.0
+testDataNorm <- sapply(testDataNorm, as.numeric )
 # final model prediction 
-test_pred <-  bestmodel.predict(bestModels, testDataNorm)
+test_pred <-  bestmodel.predict(nnModels, testDataNorm)
 test_pred <- as.factor(test_pred)
 test_true <- as.factor(testData$V1)
 # confusion matrix on Test data
-table(test_true, test_pred, dnn=c("True Values", "Prediction"))
-confusionMatrix(test_true, test_pred)
+table(test_pred,test_true, dnn=c("Prediction","True Values"))
+confusionMatrix(test_pred, test_true)
+
+####################################################################
+# DO SOME TESTS TO IMPROVE THE RESULT !!!
+# EARN 2% 
+# BUT NEED 1 MORE HOUR TO TRAIN AND MORE MEMORY
+####################################################################
+models <- list("0"=c(6,5),
+               "1"=c(8),
+               "2"=c(6,3,8,1), #, 0
+               "3"=c(5,2,8), #, 9
+               "4"=c(9,5,3,6),
+               "5"=c(8,3,6),
+               "6"=c(8),
+               "7"=c(9,2,3,8),
+               "8"=c(3), #,9
+               "9"=c(8,4,5,7,3))
+# training OvO
+# One vs One method
+nnModelsOvO <- list()
+DIGITS <- 0:9
+for (digit in DIGITS) {
+  
+  if (!is.null(models[[toString(digit)]])) {
+    l <- list()
+    
+    # get train and val data for positive class data
+    trainDataNormDigit = trainDataNorm[trainData$V1 == digit,]
+    valDataNormDigit = valDataNorm[valData$V1 == digit,]
+    
+    # get train and val data for negative class data
+    for (i in models[[toString(digit)]]) {
+      set.seed(42)
+      trainDataNormNonDigit = trainDataNorm[trainData$V1 == i,]
+      valDataNormNonDigit = valDataNorm[valData$V1 == i,]
+      
+      # bind all rows of training data
+      pos <- cbind(V1=rep(-1, nrow(trainDataNormDigit)), trainDataNormDigit)
+      neg <- cbind(V1=rep(1, nrow(trainDataNormNonDigit)), trainDataNormNonDigit)
+      trainDataFinal <- rbind(pos, neg)
+      
+      # bind all rows of validation data
+      pos <- cbind(V1=rep(-1, nrow(valDataNormDigit)), valDataNormDigit)
+      neg <- cbind(V1=rep(1, nrow(valDataNormNonDigit)), valDataNormNonDigit)
+      valDataFinal <- rbind(pos, neg)  
+      
+      l[[toString(i)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)))
+      nnModelsOvO[[toString(digit)]] <- l
+    }
+  }
+}
+rm(l)
+
+val_pred2 <- bestmodel.predict_novo(train_pred, nnModels, nnModelsOvO, trainDataNorm)
+table(val_pred2, train_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred2, train_true)
+
+
+val_pred2 <- bestmodel.predict_novo(val_pred, nnModels, nnModelsOvO, valDataNorm)
+table(val_pred2, val_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred2, val_true)
+
+# novo predict
+val_pred2 <- bestmodel.predict_novo(test_pred, nnModels, nnModelsOvO, testDataNorm)
+table(val_pred2, test_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred2, test_true)
