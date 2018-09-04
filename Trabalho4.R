@@ -151,8 +151,8 @@ plotImage = function(imgArray){
 }
 
 set.seed(42)
-#setwd("/Users/thiagom/Documents/Studies/Unicamp/MDC/INF-615/Tarefas/INF0615_Tarefa4/")
-setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
+setwd("D:\\Thiago\\Studies\\Unicamp\\MDC\\INF-615\\Tarefas\\INF0615_Tarefa4")
+#setwd("C:\\Users\\rafaelr\\Documents\\INF015\\Tarefa4\\INF0615_Tarefa4")
 
 # Exemplo de leitura do dataset
 # A primeira feature/coluna (V1) é a classe 
@@ -163,22 +163,7 @@ data = read.csv("mnist_trainVal.csv", header=FALSE)
 summary(as.factor(data[,1]))
 
 #Ex de uso pegando o primeiro sample
-plotImage(data[1,])
-
-##################################
-# Para gerar a fórmula concatenando os nomes
-#de cada uma das colunas
-##################################
-# Seleciona todos os nomes
-feats <- names(data)
-
-# Concatena o nome de cada feature, ignorando a primeira
-f <- paste(feats[2:length(feats)],collapse=' + ')
-f <- paste('V1 ~',f)
-
-# Converte para fórmula
-f <- as.formula(f)
-f
+#plotImage(data[1,])
 
 ########################################################################
 # Desenvolvimento dos Modelos                                          #
@@ -203,9 +188,32 @@ for (i in 0:9) {
   }
 }
 
+# Run PCA
+# trainData.pca <- prcomp(trainData[,2:785])
+# summary(trainData.pca)
+# From PC331, we get a cumulative proportion of 0,99004, over 99%
+# So, we'll try that to make trainning faster
+trainData <- trainData[,1:597]
+valData <- valData[,1:597]
+
 # normalize data dividing by 255 as all images are from 0~255
 trainDataNorm <- trainData[,-1] / 255.0
 valDataNorm <- valData[,-1] / 255.0
+
+##################################
+# Para gerar a fórmula concatenando os nomes
+#de cada uma das colunas
+##################################
+# Seleciona todos os nomes
+feats <- names(data)
+
+# Concatena o nome de cada feature, ignorando a primeira
+f <- paste(feats[2:length(feats)],collapse=' + ')
+f <- paste('V1 ~',f)
+
+# Converte para fórmula
+f <- as.formula(f)
+f
 
 
 #digit <- 1 # for tests purpose
@@ -257,17 +265,17 @@ for (digit in DIGITS) {
   # grid search
   #svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal, c(0.0001, 0.001, 0.01, 0.1, 1))
   # train best model
-  #svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal, c(0.001))
+  svmModelsL[[toString(digit)]] <- train.svm_linear(trainDataFinal, valDataFinal, c(0.001))
   
   # grid search
   #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal, c(0.0001, 0.001, 0.01, 0.1, 1), c(0.0001, 0.001, 0.01, 0.1, 1))
   # train best model
-  #svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal, c(0.001), c( 0.01))
+  svmModelsR[[toString(digit)]] <- train.svm_rbf(trainDataFinal, valDataFinal, c(0.001), c( 0.01))
   
   # grid search
   #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3), c(7,3), c(7,5,3)))
   # train best model
-  #nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)))
+  nnModels[[toString(digit)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)))
 
   # check on confusion matrix if some number is more difficult to predict 
   # and train a special model for it
