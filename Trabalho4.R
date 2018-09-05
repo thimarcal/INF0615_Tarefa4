@@ -35,8 +35,8 @@ predictAndEvaluateNN <- function(model, data){
   nnCompute = compute(model, data[,-1])
   prediction = nnCompute$net.result
   
-  prediction[prediction < 0.5] = -1
-  prediction[prediction >= 0.5] = 1
+  prediction[prediction < 0.8] = -1
+  prediction[prediction >= 0.8] = 1
   
   CM = as.matrix(table(Actual = data[,1], Predicted = prediction))
   if (dim(CM)[2] == 1) {
@@ -131,17 +131,14 @@ bestmodel.predict <- function(bestModels, data, net) {
 
 bestmodel.predict_novo <- function(pred, nnModels, nnModelsOvO, trainData, net) {
   val_pred2 <- pred
+  pred_value <-  data.frame()
+  pred_value2 <-  data.frame()
   
   for (digit in DIGITS) {
     if (!is.null(nnModelsOvO[[toString(digit)]])) {
-      pred_value <-  data.frame()
-      
-      nnComputeV <-  compute(nnModels[[toString(digit)]][["5, 3"]], trainData[pred == digit,])    
-      pred_value <- nnComputeV$net.result
-      
       for (i in models[[toString(digit)]]) {
         set.seed(42)
-        nnComputeV <-  compute(nnModelsOvO[[toString(digit)]][[toString(i)]][[net]], trainData[pred == digit,])
+        nnComputeV <-  compute(nnModelsOvO[[toString(digit)]][[toString(i)]][[net]], trainData)
         
         if (nrow(pred_value) == 0) {
           pred_value <- nnComputeV$net.result
@@ -149,18 +146,28 @@ bestmodel.predict_novo <- function(pred, nnModels, nnModelsOvO, trainData, net) 
         else {
           pred_value <- cbind(pred_value, nnComputeV$net.result)
         }
+        
+        prediction = nnComputeV$net.result
+
+        prediction[nnComputeV$net.result >= 0.8] = digit
+        prediction[nnComputeV$net.result < 0.8] = i
+
+        if (nrow(pred_value2) == 0) {
+          pred_value2 <- prediction
+        } 
+        else {
+          pred_value2 <- cbind(pred_value2, prediction)
+        }
       }
-      # name the colummns to get class easily on the vooting
-      colnames(pred_value) <- c(digit, models[[toString(digit)]])
-      
-      # vooting method
-      # get the column of maximum value on the prediction to get the class 
-      pred_value <- colnames(pred_value)[apply(pred_value,1,which.max)]
-      val_pred2[pred == digit] <- pred_value
     }
   }
-  val_pred2 <- as.factor(val_pred2)
-  return (val_pred2)
+
+  # vooting method
+  # get the column of maximum value on the prediction to get the class 
+  out <- sapply(0:9,function(x)rowSums(pred_value2==x))
+  colnames(out) <- 0:9
+  final <- colnames(out)[apply(out,1,which.max)]
+  return (as.factor(final))
 }
 ########################################################################
 # Métodos auxiliares para visualização das Imagens                     #
@@ -424,63 +431,65 @@ confusionMatrix(test_pred, test_true)
 #
 # TRAINING OvO models
 ####################################################################
-#models <- list("0"=c(1,2,3,4,5,6,7,8,9),#c(6,5),
-#               "1"=c(0,2,3,4,5,6,7,8,9),#c(8, 2),
-#               "2"=c(0,1,3,4,5,6,7,8,9),#c(6,3,8,1), #, 0
-#               "3"=c(0,1,2,4,5,6,7,8,9),#c(5,2,8, 9), #, 9
-#               "4"=c(0,1,2,3,5,6,7,8,9),#c(9,5,3,6),
-#               "5"=c(0,1,2,3,4,6,7,8,9),#c(8,3,6),
-#               "6"=c(0,1,2,3,4,5,7,8,9),#c(8, 5, 2),
-#               "7"=c(0,1,2,3,4,5,6,8,9),#c(9,2,3,8),
-#               "8"=c(0,1,2,3,4,5,6,7,9),#c(3, 2, 5, 9), 
-#               "9"=c(0,1,2,3,4,5,6,7,8)#c(8,4,5,7,3)
-#)
-## training OvO
-## One vs One method
-#nnModelsOvO <- list()
-#DIGITS <- 0:9
-#for (digit in DIGITS) {
-#  
-#  if (!is.null(models[[toString(digit)]])) {
-#    l <- list()
-#    
-#    # get train and val data for positive class data
-#    trainDataNormDigit = trainDataNorm[trainData$V1 == digit,]
-#    valDataNormDigit = valDataNorm[valData$V1 == digit,]
-#    
-#    # get train and val data for negative class data
-#    for (i in models[[toString(digit)]]) {
-#      set.seed(42)
-#      trainDataNormNonDigit = trainDataNorm[trainData$V1 == i,]
-#      valDataNormNonDigit = valDataNorm[valData$V1 == i,]
-#      
-#      # bind all rows of training data
-#      pos <- cbind(V1=rep(1, nrow(trainDataNormDigit)), trainDataNormDigit)
-#      neg <- cbind(V1=rep(-1, nrow(trainDataNormNonDigit)), trainDataNormNonDigit)
-#      trainDataFinal <- rbind(pos, neg)
-#      
-#      # bind all rows of validation data
-#      pos <- cbind(V1=rep(1, nrow(valDataNormDigit)), valDataNormDigit)
-#      neg <- cbind(V1=rep(-1, nrow(valDataNormNonDigit)), valDataNormNonDigit)
-#      valDataFinal <- rbind(pos, neg)  
-#      
-#      l[[toString(i)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)), f)
-#      nnModelsOvO[[toString(digit)]] <- l
-#    }
-#  }
-#}
-#rm(l)
-#
-#val_pred2 <- bestmodel.predict_novo(train_pred, nnModels, nnModelsOvO, trainDataNorm)
-#table(val_pred2, train_true, dnn=c("Prediction", "True Values"))
-#confusionMatrix(val_pred2, train_true)
-#
-#
-#val_pred2 <- bestmodel.predict_novo(val_pred, nnModels, nnModelsOvO, valDataNorm)
-#table(val_pred2, val_true, dnn=c("Prediction", "True Values"))
-#confusionMatrix(val_pred2, val_true)
-#
-## novo predict
-#val_pred2 <- bestmodel.predict_novo(test_pred, nnModels, nnModelsOvO, testDataNorm)
-#table(val_pred2, test_true, dnn=c("Prediction", "True Values"))
-#confusionMatrix(val_pred2, test_true)
+models <- list("0"=c(1,2,3,4,5,6,7,8,9),#c(6,5),
+               "1"=c(0,2,3,4,5,6,7,8,9),#c(8, 2),
+               "2"=c(0,1,3,4,5,6,7,8,9),#c(6,3,8,1), #, 0
+               "3"=c(0,1,2,4,5,6,7,8,9),#c(5,2,8, 9), #, 9
+               "4"=c(0,1,2,3,5,6,7,8,9),#c(9,5,3,6),
+               "5"=c(0,1,2,3,4,6,7,8,9),#c(8,3,6),
+               "6"=c(0,1,2,3,4,5,7,8,9),#c(8, 5, 2),
+               "7"=c(0,1,2,3,4,5,6,8,9),#c(9,2,3,8),
+               "8"=c(0,1,2,3,4,5,6,7,9),#c(3, 2, 5, 9), 
+               "9"=c(0,1,2,3,4,5,6,7,8)#c(8,4,5,7,3)
+)
+# training OvO
+# One vs One method
+nnModelsOvO <- list()
+DIGITS <- 0:9
+for (digit in DIGITS) {
+  
+  if (!is.null(models[[toString(digit)]])) {
+    l <- list()
+    
+    # get train and val data for positive class data
+    trainDataNormDigit = trainDataNorm[trainData$V1 == digit,]
+    valDataNormDigit = valDataNorm[valData$V1 == digit,]
+    
+    # get train and val data for negative class data
+    for (i in models[[toString(digit)]]) {
+      set.seed(42)
+      trainDataNormNonDigit = trainDataNorm[trainData$V1 == i,]
+      valDataNormNonDigit = valDataNorm[valData$V1 == i,]
+      
+      # bind all rows of training data
+      pos <- cbind(V1=rep(1, nrow(trainDataNormDigit)), trainDataNormDigit)
+      neg <- cbind(V1=rep(-1, nrow(trainDataNormNonDigit)), trainDataNormNonDigit)
+      trainDataFinal <- rbind(pos, neg)
+      
+      # bind all rows of validation data
+      pos <- cbind(V1=rep(1, nrow(valDataNormDigit)), valDataNormDigit)
+      neg <- cbind(V1=rep(-1, nrow(valDataNormNonDigit)), valDataNormNonDigit)
+      valDataFinal <- rbind(pos, neg)  
+      
+      l[[toString(i)]] <- train.neural_net(trainDataFinal, valDataFinal, list(c(5,3)), f)
+      nnModelsOvO[[toString(digit)]] <- l
+    }
+  }
+}
+rm(l)
+
+train_pred <- 0
+val_pred2 <- bestmodel.predict_novo(train_pred, nnModels, nnModelsOvO, trainDataNorm,"5, 3")
+table(val_pred2, train_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred2, train_true)
+
+val_pred <- 0
+val_pred2 <- bestmodel.predict_novo(val_pred, nnModels, nnModelsOvO, valDataNorm,"5, 3")
+table(val_pred2, val_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred2, val_true)
+
+# novo predict
+test_pred <- 0
+val_pred2 <- bestmodel.predict_novo(test_pred, nnModels, nnModelsOvO, testDataNorm,"5, 3")
+table(val_pred2, test_true, dnn=c("Prediction", "True Values"))
+confusionMatrix(val_pred2, test_true)
